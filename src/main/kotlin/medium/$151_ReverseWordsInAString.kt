@@ -40,19 +40,51 @@ fun main() {
 }
 
 fun `Reverse Words in a String`(s: String): String {
+    /**
+     * set a pointer at the end of the string
+     */
     var start = s.lastIndex
-    val deque = ArrayDeque<String>()
 
+    /**
+     * initialize list to store the result
+     */
+    val answer = mutableListOf<String>()
+
+    /**
+     * iterate through the string from the end
+     */
     while (start >= 0) {
+        /**
+         * set the end pointer at the same position as the start pointer
+         * "start" will slide to the left until it reaches a space
+         * "end" will remain at start position
+         */
         var end = start
+
+        /**
+         * slide the start pointer to the left until it reaches a space
+         */
         while (start >= 0 && s[start] != ' ') {
             start--
         }
-        deque.add(s.substring(start + 1, end + 1))
+
+        /**
+         * start is now at the position of the last space
+         * add the substring (word) to the result list
+         */
+        answer.add(s.substring(start + 1, end + 1))
+
+        /**
+         * slide the start pointer to the left until it reaches a non-space character
+         */
         while (start >= 0 && s[start] == ' ') {
             start--
         }
     }
 
-    return deque.joinToString(" ").trim()
+    /**
+     * return the result list as a string
+     * use trim since there could be leading or trailing spaces
+     */
+    return answer.joinToString(" ").trim()
 }
