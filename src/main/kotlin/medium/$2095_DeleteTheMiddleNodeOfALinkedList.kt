@@ -36,6 +36,67 @@ package medium
  * Node 0 with value 2 is the only node remaining after removing node 1.
  */
 fun main() {
+    class ListNode(var `val`: Int) {
+        var next: ListNode? = null
+    }
+
+
+    fun `Delete the Middle Ndde of a Linked List`(head: ListNode?): ListNode? {
+        /**
+         * base case: if the linked list is empty or has only one node, return empty node
+         */
+        if (head?.next == null) {
+            return null
+        }
+
+        /**
+         * create a slow pointer and a fast pointer
+         */
+        var slow = head
+        var fast = head
+
+        /**
+         * create a prev node to keep track of the previous node of slow
+         */
+        var prev: ListNode? = null
+
+        /**
+         * loop through the linked list,
+         * - slow pointer moves one node at a time
+         * - fast pointer moves two nodes at a time
+         * - this way, slow will be at the middle node when fast reaches the end of the linked list (and also meets the
+         *   requirement of (n / 2)th node from the start using 0-based indexing)
+         */
+        while (fast?.next != null) {
+            prev = slow
+            slow = slow?.next
+            fast = fast.next?.next
+        }
+
+        /**
+         * attach prev node of slow and next node of slow
+         */
+        prev?.next = slow?.next
+
+        /**
+         * return the head of the modified linked list
+         */
+        return head
+    }
+
+    fun printLinkedList(head: ListNode?) {
+        var node = head
+        print("[")
+        while (node != null) {
+            print("${node.`val`}")
+            node = node.next
+            if (node != null) {
+                print(",")
+            }
+        }
+        println("]")
+    }
+
     val head1 = ListNode(1)
     head1.next = ListNode(3)
     head1.next?.next = ListNode(4)
@@ -59,58 +120,3 @@ fun main() {
     printLinkedList(res3) // [2]
 }
 
-private fun `Delete the Middle Ndde of a Linked List`(head: ListNode?): ListNode? {
-    /**
-     * base case: if the linked list is empty or has only one node, return empty node
-     */
-    if (head?.next == null) {
-        return null
-    }
-
-    /**
-     * create a slow pointer and a fast pointer
-     */
-    var slow = head
-    var fast = head
-
-    /**
-     * create a prev node to keep track of the previous node of slow
-     */
-    var prev: ListNode? = null
-
-    /**
-     * loop through the linked list,
-     * - slow pointer moves one node at a time
-     * - fast pointer moves two nodes at a time
-     * - this way, slow will be at the middle node when fast reaches the end of the linked list (and also meets the
-     *   requirement of (n / 2)th node from the start using 0-based indexing)
-     */
-    while (fast?.next != null) {
-        prev = slow
-        slow = slow?.next
-        fast = fast.next?.next
-    }
-
-    /**
-     * attach prev node of slow and next node of slow
-     */
-    prev?.next = slow?.next
-
-    /**
-     * return the head of the modified linked list
-     */
-    return head
-}
-
-private class ListNode(var `val`: Int) {
-    var next: ListNode? = null
-}
-
-private fun printLinkedList(head: ListNode?) {
-    var node = head
-    while (node != null) {
-        print("${node.`val`} ")
-        node = node.next
-    }
-    println()
-}
