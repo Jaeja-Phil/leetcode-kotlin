@@ -34,6 +34,11 @@ fun main() {
         var left = 0
         var right = letters.lastIndex
 
+        // base case
+        if (target >= letters[right] || target < letters[left]) {
+            return letters[left]
+        }
+
         while (left < right) {
             val mid = left + (right - left) / 2
             if (target < letters[mid]) {
@@ -47,4 +52,6 @@ fun main() {
 
     println(nextGreatestLetter(charArrayOf('c', 'f', 'j'), 'a')) // c
     println(nextGreatestLetter(charArrayOf('c', 'f', 'j'), 'c')) // f
+    println(nextGreatestLetter(charArrayOf('c', 'f', 'j'), 'd')) // f
+    println(nextGreatestLetter(charArrayOf('x', 'x', 'y', 'y'), 'z')) // x
 }
