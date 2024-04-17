@@ -6,7 +6,7 @@ package medium
  * ArrayReader which have the following functions:
  *
  * - int compareSub(int l, int r, int x, int y): where 0 <= l, r, x, y < ArrayReader.length(), l <= r and x <= y.
- * The function compares the sum of sub-array arr[l..r] with the sum of the sub-array arr[x..y] and returns:
+ * The function compares the sum of sub-array arr[l~r] with the sum of the sub-array arr[x~y] and returns:
  *   - 1 if arr[l]+arr[l+1]+...+arr[r] > arr[x]+arr[x+1]+...+arr[y].
  *   - 0 if arr[l]+arr[l+1]+...+arr[r] == arr[x]+arr[x+1]+...+arr[y].
  *   - -1 if arr[l]+arr[l+1]+...+arr[r] < arr[x]+arr[x+1]+...+arr[y].
