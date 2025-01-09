@@ -39,7 +39,13 @@ fun main() {
         for (stringInfo in stringInfos) {
             for (i in m downTo stringInfo.zeros) {
                 for (j in n downTo stringInfo.ones) {
-                    dp[i][j] = maxOf(dp[i][j], dp[i - stringInfo.zeros][j - stringInfo.ones] + 1)
+                    // dp[i][j] = max number of strings that can be formed with i zeros and j ones
+                    dp[i][j] = maxOf(
+                        // Don't include the current string
+                        dp[i][j],
+                        // Include the current string
+                        dp[i - stringInfo.zeros][j - stringInfo.ones] + 1
+                    )
                 }
             }
         }
