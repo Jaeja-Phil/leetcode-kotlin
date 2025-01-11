@@ -19,21 +19,36 @@ package easy
  */
 fun main() {
     fun longestCommonPrefix(strs: Array<String>): String {
-        // find the min length string
-        val minLength = strs.minOf { it.length }
+        // Solution 1.
+//        // find the min length string
+//        val minLength = strs.minOf { it.length }
+//
+//        // iterate through the min length string
+//        repeat(minLength) { i ->
+//            // get the first character of the first string
+//            val char = strs[0][i]
+//
+//            // check if the character is not the same in the rest of the strings
+//            if (strs.any { it[i] != char }) {
+//                return strs[0].take(i)
+//            }
+//        }
+//
+//        return strs[0].take(minLength)
 
-        // iterate through the min length string
-        repeat(minLength) { i ->
-            // get the first character of the first string
-            val char = strs[0][i]
+        // Solution 2.
+        if (strs.size == 1) return strs[0]
 
-            // check if the character is not the same in the rest of the strings
-            if (strs.any { it[i] != char }) {
-                return strs[0].take(i)
+        val firstStr = strs.first()
+        for (i in firstStr.indices) {
+            for (j in 1..<strs.size) {
+                if (i == strs[j].length || firstStr[i] != strs[j][i]) {
+                    return firstStr.substring(0, i)
+                }
             }
         }
 
-        return strs[0].take(minLength)
+        return firstStr
     }
 
     val tests = listOf(
