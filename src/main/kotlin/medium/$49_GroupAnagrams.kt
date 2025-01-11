@@ -26,16 +26,30 @@ package medium
  */
 fun main() {
     fun groupAnagrams(strs: Array<String>): List<List<String>> {
-        val map = mutableMapOf<MutableMap<Char, Int>, MutableList<String>>()
-        for (word in strs) {
-            val charMap = mutableMapOf<Char, Int>()
-            for (char in word) {
-                charMap[char] = charMap.getOrDefault(char, 0) + 1
+        // Solution 1.
+//        val map = mutableMapOf<MutableMap<Char, Int>, MutableList<String>>()
+//        for (word in strs) {
+//            val charMap = mutableMapOf<Char, Int>()
+//            for (char in word) {
+//                charMap[char] = charMap.getOrDefault(char, 0) + 1
+//            }
+//            map[charMap] = map.getOrDefault(charMap, mutableListOf()).apply { add(word) }
+//        }
+//
+//        return map.values.toList()
+
+        // Solution 2.
+        val res = mutableMapOf<List<Int>, MutableList<String>>()
+
+        for (s in strs) {
+            val count = MutableList(26) { 0 }
+            for (c in s) {
+                count[c - 'a']++
             }
-            map[charMap] = map.getOrDefault(charMap, mutableListOf()).apply { add(word) }
+            res.getOrPut(count) { mutableListOf() }.add(s)
         }
 
-        return map.values.toList()
+        return res.values.toList()
     }
 
     val input = arrayOf("eat", "tea", "tan", "ate", "nat", "bat")
