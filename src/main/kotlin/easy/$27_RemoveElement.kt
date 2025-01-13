@@ -43,30 +43,40 @@ package easy
  */
 fun main() {
     fun removeElement(nums: IntArray, `val`: Int): Int {
-        val REMOVED_NUMBER = Integer.MIN_VALUE
-        var right = nums.lastIndex
-        while (right >= 0 && nums[right] == `val`) {
-            nums[right--] = REMOVED_NUMBER
-        }
-        if (right < 0) {
-            return 0
-        }
+        // Solution 1.
+//        val REMOVED_NUMBER = Integer.MIN_VALUE
+//        var right = nums.lastIndex
+//        while (right >= 0 && nums[right] == `val`) {
+//            nums[right--] = REMOVED_NUMBER
+//        }
+//        if (right < 0) {
+//            return 0
+//        }
+//
+//        var left = 0
+//        var count = 0
+//        while (left <= right) {
+//            val currNum = nums[left]
+//            if (currNum == `val`) {
+//                // swap with right and decrement right
+//                nums[left] = nums[right]
+//                nums[right--] = REMOVED_NUMBER
+//            } else {
+//                count++
+//                left++
+//            }
+//        }
+//
+//        return count
 
+        // Solution 2.
         var left = 0
-        var count = 0
-        while (left <= right) {
-            val currNum = nums[left]
-            if (currNum == `val`) {
-                // swap with right and decrement right
-                nums[left] = nums[right]
-                nums[right--] = REMOVED_NUMBER
-            } else {
-                count++
-                left++
+        nums.forEachIndexed { index, num ->
+            if (num != `val`) {
+                nums[left++] = nums[index]
             }
         }
-
-        return count
+        return left
     }
 
     val nums1 = intArrayOf(3, 2, 2, 3)
