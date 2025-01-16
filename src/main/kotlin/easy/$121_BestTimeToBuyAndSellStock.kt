@@ -25,15 +25,33 @@ package easy
  */
 fun main() {
     fun maxProfit(prices: IntArray): Int {
-        var minPrice = prices[0]
+        // Solution 1.
+//        var minPrice = prices[0]
+//        var maxProfit = 0
+//        for (i in 1 .. prices.lastIndex) {
+//            val currPrice = prices[i]
+//            if (currPrice > minPrice) {
+//                maxProfit = maxOf(maxProfit, currPrice - minPrice)
+//            } else {
+//                minPrice = minOf(minPrice, currPrice)
+//            }
+//        }
+//
+//        return maxProfit
+
+        // Solution 2.
+        var buy = 0
+        var sell = 1
         var maxProfit = 0
-        for (i in 1 .. prices.lastIndex) {
-            val currPrice = prices[i]
-            if (currPrice > minPrice) {
-                maxProfit = maxOf(maxProfit, currPrice - minPrice)
+        while (sell < prices.size) {
+            if (prices[sell] > prices[buy]) {
+                maxProfit = maxOf(maxProfit, prices[sell] - prices[buy])
             } else {
-                minPrice = minOf(minPrice, currPrice)
+                // If the current price is less than the buy price, update when to buy.
+                buy = sell
             }
+
+            sell++
         }
 
         return maxProfit
