@@ -44,40 +44,64 @@ package medium
  */
 fun main() {
     class Solution {
+        // Solution 1.
+//        fun isValidSudoku(board: Array<CharArray>): Boolean {
+//            return areRowsValid(board) && areColsValid(board) && areSubBoxesValid(board)
+//        }
+//
+//        fun areRowsValid(board: Array<CharArray>): Boolean {
+//            for (row in board) {
+//                val set = mutableSetOf<Char>()
+//                for (cell in row) if (cell.isDigit() && !set.add(cell)) return false
+//            }
+//
+//            return true
+//        }
+//
+//        fun areColsValid(board: Array<CharArray>): Boolean {
+//            for (col in board.indices) {
+//                val set = mutableSetOf<Char>()
+//                for (row in board.indices) {
+//                    val cell = board[row][col]
+//                    if (cell.isDigit() && !set.add(cell)) return false
+//                }
+//            }
+//
+//            return true
+//        }
+//
+//        fun areSubBoxesValid(board: Array<CharArray>): Boolean {
+//            for (subBoxRow in 0..2) {
+//                for (subBoxCol in 0..2) {
+//                    val set = mutableSetOf<Char>()
+//                    for (i in 0..2) {
+//                        for (j in 0..2) {
+//                            val cell = board[subBoxRow * 3 + i][subBoxCol * 3 + j]
+//                            if (cell.isDigit() && !set.add(cell)) return false
+//                        }
+//                    }
+//                }
+//            }
+//
+//            return true
+//        }
+
+        // Solution 2.
         fun isValidSudoku(board: Array<CharArray>): Boolean {
-            return areRowsValid(board) && areColsValid(board) && areSubBoxesValid(board)
-        }
+            val cols = mutableMapOf<Int, MutableSet<Char>>()
+            val rows = mutableMapOf<Int, MutableSet<Char>>()
+            val squares = mutableMapOf<Pair<Int, Int>, MutableSet<Char>>()
 
-        fun areRowsValid(board: Array<CharArray>): Boolean {
-            for (row in board) {
-                val set = mutableSetOf<Char>()
-                for (cell in row) if (cell.isDigit() && !set.add(cell)) return false
-            }
-
-            return true
-        }
-
-        fun areColsValid(board: Array<CharArray>): Boolean {
-            for (col in board.indices) {
-                val set = mutableSetOf<Char>()
-                for (row in board.indices) {
+            for (row in board.indices) {
+                for (col in board.indices) {
                     val cell = board[row][col]
-                    if (cell.isDigit() && !set.add(cell)) return false
-                }
-            }
+                    if (cell == '.') continue
 
-            return true
-        }
-
-        fun areSubBoxesValid(board: Array<CharArray>): Boolean {
-            for (subBoxRow in 0..2) {
-                for (subBoxCol in 0..2) {
-                    val set = mutableSetOf<Char>()
-                    for (i in 0..2) {
-                        for (j in 0..2) {
-                            val cell = board[subBoxRow * 3 + i][subBoxCol * 3 + j]
-                            if (cell.isDigit() && !set.add(cell)) return false
-                        }
+                    if (!rows.getOrPut(row) { mutableSetOf() }.add(cell) ||
+                        !cols.getOrPut(col) { mutableSetOf() }.add(cell) ||
+                        !squares.getOrPut(Pair(row / 3, col / 3)) { mutableSetOf() }.add(cell)
+                    ) {
+                        return false
                     }
                 }
             }
