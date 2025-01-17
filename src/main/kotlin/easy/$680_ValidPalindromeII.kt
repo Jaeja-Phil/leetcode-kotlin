@@ -22,22 +22,29 @@ package easy
 fun main() {
     fun validPalindrome(s: String): Boolean {
         // Solution 1. (Recursive)
-//        fun isValid(left: Int, right: Int, deleteCount: Int): Boolean {
+//        fun canFormPalindrome(left: Int, right: Int, deleteCount: Int): Boolean {
+//            // since this question allows at most one deletion...
+//            // if allowed delete count changes, you may change accordingly
 //            if (deleteCount > 1) {
 //                return false
 //            }
+//
+//            // base case, if recursion has reached its end, it means the string is palindrome
 //            if (left > right) {
 //                return true
 //            }
 //
+//            // if the characters are equal, move both pointers
 //            return if (s[left] == s[right]) {
-//                isValid(left + 1, right - 1, deleteCount)
+//                canFormPalindrome(left + 1, right - 1, deleteCount)
 //            } else {
-//                isValid(left + 1, right, deleteCount + 1) || isValid(left, right - 1, deleteCount + 1)
+//                // if the characters are not equal, try to delete one character from left OR right
+//                // NOTE: must increase deleteCount by 1
+//                canFormPalindrome(left + 1, right, deleteCount + 1) || canFormPalindrome(left, right - 1, deleteCount + 1)
 //            }
 //        }
 //
-//        return isValid(0, s.lastIndex, 0)
+//        return canFormPalindrome(0, s.lastIndex, 0)
 
         // Solution 2.
         fun isPalindrome(left: Int, right: Int): Boolean {
