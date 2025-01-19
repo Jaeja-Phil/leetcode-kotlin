@@ -43,20 +43,33 @@ package easy
  */
 fun main() {
     fun removeDuplicates(nums: IntArray): Int {
-        // base case
+        // Solution 1.
+//        // base case
+//        if (nums.size <= 1) return nums.size
+//
+//        var prevNum = nums[0]
+//        var prevIndex = 1
+//        for (i in 1 .. nums.lastIndex) {
+//            val currNum = nums[i]
+//            if (currNum != prevNum) {
+//                prevNum = currNum
+//                nums[prevIndex++] = currNum
+//            }
+//        }
+//
+//        return prevIndex
+
+        // Solution 2.
         if (nums.size <= 1) return nums.size
 
-        var prevNum = nums[0]
-        var prevIndex = 1
-        for (i in 1 .. nums.lastIndex) {
-            val currNum = nums[i]
-            if (currNum != prevNum) {
-                prevNum = currNum
-                nums[prevIndex++] = currNum
+        var left = 1
+        for (right in 1 .. nums.lastIndex) {
+            if (nums[right] != nums[right - 1]) {
+                nums[left++] = nums[right]
             }
         }
 
-        return prevIndex
+        return left
     }
 
     val nums1 = intArrayOf(1, 1, 2)
