@@ -36,15 +36,30 @@ package medium
  */
 fun main() {
     fun twoSum(numbers: IntArray, target: Int): IntArray {
-        var left = 0
-        var right = numbers.lastIndex
-        while (left < right) {
-            val sum = numbers[left] + numbers[right]
-            when {
-                sum < target -> left++
-                sum > target -> right--
-                else -> return intArrayOf(left + 1, right + 1)
+        // Solution 1.
+//        var left = 0
+//        var right = numbers.lastIndex
+//        while (left < right) {
+//            val sum = numbers[left] + numbers[right]
+//            when {
+//                sum < target -> left++
+//                sum > target -> right--
+//                else -> return intArrayOf(left + 1, right + 1)
+//            }
+//        }
+//
+//        return intArrayOf(-1, -1)
+
+        // Solution 2.
+        val map = mutableMapOf<Int, Int>() // key: number, value: index
+        map[numbers[0]] = 1
+        for (i in 1 .. numbers.lastIndex) {
+            val num = numbers[i]
+            val diff = target - num
+            if (map.containsKey(diff)) {
+                return intArrayOf(map[diff]!!, i + 1)
             }
+            map[num] = i + 1
         }
 
         return intArrayOf(-1, -1)
