@@ -32,6 +32,7 @@ package medium
  */
 fun main() {
     fun threeSum(nums: IntArray): List<List<Int>> {
+        // Solution 1 (Two Pointers).
         nums.sort()
         val result = mutableListOf<List<Int>>()
         var first = 0
