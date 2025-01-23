@@ -23,12 +23,28 @@ package easy
  */
 fun main() {
     fun containsNearbyDuplicate(nums: IntArray, k: Int): Boolean {
-        val distanceMap = mutableMapOf<Int, Int>()
+        // Solution 1.
+//        val distanceMap = mutableMapOf<Int, Int>()
+//        for (i in nums.indices) {
+//            if (distanceMap.containsKey(nums[i]) && i - distanceMap[nums[i]]!! <= k) {
+//                return true
+//            }
+//            distanceMap[nums[i]] = i
+//        }
+//
+//        return false
+
+        // Solution 2.
+        val set = hashSetOf<Int>()
+        var left = 0
         for (i in nums.indices) {
-            if (distanceMap.containsKey(nums[i]) && i - distanceMap[nums[i]]!! <= k) {
+            if (i - left > k) {
+                set.remove(nums[left++])
+            }
+            if (set.contains(nums[i])) {
                 return true
             }
-            distanceMap[nums[i]] = i
+            set.add(nums[i])
         }
 
         return false
