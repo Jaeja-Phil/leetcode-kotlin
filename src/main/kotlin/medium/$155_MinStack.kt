@@ -47,6 +47,7 @@ fun main() {
 }
 
 class `$155_MinStack` {
+    // Solution 1.
     // 1st is the actual value, 2nd is the minimum value with given value
     private val stack = mutableListOf<Pair<Int, Int>>()
 
@@ -71,4 +72,27 @@ class `$155_MinStack` {
     fun getMin(): Int {
         return stack.last().second
     }
+
+    // Solution 2.
+//    private val stack = mutableListOf<Int>()
+//    private val minStack = mutableListOf<Int>()
+//
+//    fun push(`val`: Int) {
+//        stack.add(`val`)
+//        val minVal = if (minStack.isEmpty()) `val` else minOf(`val`, minStack.last())
+//        minStack.add(minVal)
+//    }
+//
+//    fun pop() {
+//        stack.removeLast()
+//        minStack.removeLast()
+//    }
+//
+//    fun top(): Int {
+//        return stack.last()
+//    }
+//
+//    fun getMin(): Int {
+//        return minStack.last()
+//    }
 }
