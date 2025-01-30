@@ -1,5 +1,7 @@
 package medium
 
+import java.util.Stack
+
 /**
  * You are given an array of strings tokens that represents an arithmetic expression in a Reverse Polish Notation.
  * Evaluate the expression. Return an integer that represents the value of the expression.
@@ -33,30 +35,53 @@ package medium
  */
 fun main() {
     fun evalRPN(tokens: Array<String>): Int {
-        if (tokens.size == 1) return tokens[0].toInt()
+        // Solution 1.
+//        if (tokens.size == 1) return tokens[0].toInt()
+//
+//        val operators = setOf("+", "-", "*", "/")
+//        val numberStack = mutableListOf<Int>()
+//        val operatorStack = mutableListOf<String>()
+//        for (token in tokens) {
+//            when {
+//                operators.contains(token) -> operatorStack.add(token)
+//                else -> numberStack.add(token.toInt())
+//            }
+//            if (token in operators) {
+//                val operator = operatorStack.removeLast()
+//                val second = numberStack.removeLast()
+//                val first = numberStack.removeLast()
+//                when (operator) {
+//                    "+" -> numberStack.add(first + second)
+//                    "-" -> numberStack.add(first - second)
+//                    "*" -> numberStack.add(first * second)
+//                    "/" -> numberStack.add(first / second)
+//                }
+//            }
+//        }
+//
+//        return numberStack.last()
 
-        val operators = setOf("+", "-", "*", "/")
-        val numberStack = mutableListOf<Int>()
-        val operatorStack = mutableListOf<String>()
+        // Solution 2.
+        val stack = Stack<Int>()
         for (token in tokens) {
-            when {
-                operators.contains(token) -> operatorStack.add(token)
-                else -> numberStack.add(token.toInt())
-            }
-            if (token in operators) {
-                val operator = operatorStack.removeLast()
-                val second = numberStack.removeLast()
-                val first = numberStack.removeLast()
-                when (operator) {
-                    "+" -> numberStack.add(first + second)
-                    "-" -> numberStack.add(first - second)
-                    "*" -> numberStack.add(first * second)
-                    "/" -> numberStack.add(first / second)
+            when (token) {
+                "+" -> stack.push(stack.pop() + stack.pop())
+                "-" -> {
+                    val second = stack.pop()
+                    val first = stack.pop()
+                    stack.push(first - second)
                 }
+                "*" -> stack.push(stack.pop() * stack.pop())
+                "/" -> {
+                    val second = stack.pop()
+                    val first = stack.pop()
+                    stack.push(first / second)
+                }
+                else -> stack.push(token.toInt())
             }
         }
 
-        return numberStack.last()
+        return stack.pop()
     }
 
     val result = evalRPN(arrayOf("2", "1", "+", "3", "*"))
