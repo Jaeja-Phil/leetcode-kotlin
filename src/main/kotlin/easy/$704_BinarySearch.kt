@@ -24,20 +24,37 @@ package easy
  */
 fun main() {
     fun search(nums: IntArray, target: Int): Int {
+        // Solution 1.
+//        var left = 0
+//        var right = nums.lastIndex
+//
+//        while (left < right) {
+//            val mid = left + (right - left) / 2
+//            val currentNum = nums[mid]
+//            when {
+//                currentNum == target -> return mid
+//                currentNum > target -> right = mid - 1
+//                else -> left = mid + 1
+//            }
+//        }
+//
+//        return if (nums[left] == target) left else -1
+
+        // Solution 2.
         var left = 0
         var right = nums.lastIndex
 
-        while (left < right) {
+        while (left <= right) {
             val mid = left + (right - left) / 2
             val currentNum = nums[mid]
             when {
-                currentNum == target -> return mid
                 currentNum > target -> right = mid - 1
-                else -> left = mid + 1
+                currentNum < target -> left = mid + 1
+                else -> return mid
             }
         }
 
-        return if (nums[left] == target) left else -1
+        return -1
     }
 
     println(search(intArrayOf(-1, 0, 3, 5, 9, 12), 9)) // 4
