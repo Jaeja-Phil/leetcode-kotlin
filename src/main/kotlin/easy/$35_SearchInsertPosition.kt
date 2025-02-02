@@ -26,18 +26,34 @@ package easy
  */
 fun main() {
     fun searchInsert(nums: IntArray, target: Int): Int {
+        // Solution 1.
+//        var left = 0
+//        var right = nums.lastIndex
+//        while (left < right) {
+//            val mid = left + (right - left) /2
+//            when {
+//                nums[mid] == target -> return mid
+//                nums[mid] > target -> right = mid -1
+//                else -> left = mid + 1
+//            }
+//        }
+//
+//        return if (nums[left] >= target) left else left + 1
+
+        // Solution 2.
         var left = 0
         var right = nums.lastIndex
-        while (left < right) {
-            val mid = left + (right - left) /2
+
+        while (left <= right) {
+            val mid = left + (right - left) / 2
             when {
-                nums[mid] == target -> return mid
-                nums[mid] > target -> right = mid -1
-                else -> left = mid + 1
+                target > nums[mid] -> left = mid + 1
+                target < nums[mid] -> right = mid - 1
+                else -> return mid
             }
         }
 
-        return if (nums[left] >= target) left else left + 1
+        return left
     }
 
     println(searchInsert(intArrayOf(1, 3, 5, 6), 5)) // 2
