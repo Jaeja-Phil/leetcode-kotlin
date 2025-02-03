@@ -1,5 +1,7 @@
 package medium
 
+import kotlin.math.ceil
+
 /**
  * Koko loves to eat bananas. There are n piles of bananas, the ith pile has piles[i] bananas. The guards have gone
  * and will come back in h hours.
@@ -31,36 +33,65 @@ package medium
  */
 fun main() {
     fun minEatingSpeed(piles: IntArray, h: Int): Int {
-        // sort the piles array
+        // Solution 1.
+//        // sort the piles array
+//        piles.sort()
+//
+//        // get the size of the piles array
+//        val pilesSize = piles.size
+//
+//        var left = 1
+//        var right = piles[pilesSize - 1]
+//        while (left < right) {
+//            val mid = left + (right - left) / 2
+//            var hours = 0
+//            for (i in 0 until pilesSize) {
+//                hours += (piles[i] + mid - 1) / mid
+//            }
+//            if (hours > h) {
+//                left = mid + 1
+//            } else {
+//                right = mid
+//            }
+//        }
+//
+//        return left
+
+        // Solution 2.
         piles.sort()
-
-        // get the size of the piles array
-        val pilesSize = piles.size
-
         var left = 1
-        var right = piles[pilesSize - 1]
-        while (left < right) {
+        var right = piles.max()
+        var res = right
+
+        while (left <= right) {
             val mid = left + (right - left) / 2
-            var hours = 0
-            for (i in 0 until pilesSize) {
-                hours += (piles[i] + mid - 1) / mid
+            var hours = 0L
+            for (pile in piles) {
+                hours += ceil(pile.toDouble() / mid).toLong()
             }
+
             if (hours > h) {
+                // if too much time was taken, need to increase the speed, shift left
                 left = mid + 1
             } else {
-                right = mid
+                // if time taken is less than or equal to h, need to decrease the speed, shift right
+                res = mid
+                right = mid - 1
             }
         }
 
-        return left
+        return res
     }
 
-    val result = minEatingSpeed(intArrayOf(3, 6, 7, 11), 8)
-    println(result) // 4
+//    val result = minEatingSpeed(intArrayOf(3, 6, 7, 11), 8)
+//    println(result) // 4
+//
+//    val result2 = minEatingSpeed(intArrayOf(30, 11, 23, 4, 20), 5)
+//    println(result2) // 30
+//
+//    val result3 = minEatingSpeed(intArrayOf(30, 11, 23, 4, 20), 6)
+//    println(result3) // 23
 
-    val result2 = minEatingSpeed(intArrayOf(30, 11, 23, 4, 20), 5)
-    println(result2) // 30
-
-    val result3 = minEatingSpeed(intArrayOf(30, 11, 23, 4, 20), 6)
-    println(result3) // 23
+    val result4 = minEatingSpeed(intArrayOf(805306368,805306368,805306368), 1000000000)
+    println(result4) // 3
 }
