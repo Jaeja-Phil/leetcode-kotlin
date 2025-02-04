@@ -25,48 +25,61 @@ fun main() {
     }
 
     fun reverseList(head: ListNode?): ListNode? {
-        /**
-         * base case: return head if head is null or head.next is null
-         */
-        if (head?.next == null) {
-            return head
-        }
+        // Solution 1.
+//        /**
+//         * base case: return head if head is null or head.next is null
+//         */
+//        if (head?.next == null) {
+//            return head
+//        }
+//
+//        /**
+//         * create a variable to store the previous node
+//         */
+//        var prev: ListNode? = null
+//        var curr = head
+//
+//        /**
+//         * iterate through the LinkedList while there is a next node
+//         */
+//        while (curr != null) {
+//            /**
+//             * store the next node in a variable
+//             */
+//            val next = curr.next
+//
+//            /**
+//             * set the next node to the previous node
+//             */
+//            curr.next = prev
+//
+//            /**
+//             * set the previous node to the current node
+//             */
+//            prev = curr
+//
+//            /**
+//             * set the current node to the next node
+//             */
+//            curr = next
+//        }
+//
+//        /**
+//         * prev is the reversed head now, return it
+//         */
+//        return prev
 
-        /**
-         * create a variable to store the previous node
-         */
-        var prev: ListNode? = null
-        var curr = head
-
-        /**
-         * iterate through the LinkedList while there is a next node
-         */
-        while (curr != null) {
-            /**
-             * store the next node in a variable
-             */
+        // Solution 2. Recursive
+        fun reverse(curr: ListNode?, prev: ListNode?): ListNode? {
+            if (curr == null) {
+                return prev
+            }
             val next = curr.next
-
-            /**
-             * set the next node to the previous node
-             */
             curr.next = prev
-
-            /**
-             * set the previous node to the current node
-             */
-            prev = curr
-
-            /**
-             * set the current node to the next node
-             */
-            curr = next
+            return reverse(next, curr)
         }
 
-        /**
-         * prev is the reversed head now, return it
-         */
-        return prev
+        return reverse(head, null)
     }
 
     fun printList(head: ListNode?) {
