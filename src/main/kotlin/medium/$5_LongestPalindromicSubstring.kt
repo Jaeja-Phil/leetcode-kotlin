@@ -24,23 +24,29 @@ fun main() {
         var maxLength = 1
 
         for (i in 0 ..< n) {
+            // for every single character, it is a palindrome
             dp[i][i] = true
-        }
-
-        for (i in 0 ..< n - 1) {
-            if (s[i] == s[i + 1]) {
+            // for every two characters, if they are the same, it is a palindrome
+            // but, need to check if n + 1 is in bounds
+            if (i < n - 1 && s[i] == s[i + 1]) {
                 dp[i][i + 1] = true
                 start = i
                 maxLength = 2
             }
         }
 
+        // now, with every single character and two characters(which are adjacent to the single character) are checked
+        // for palindrome, we can check for length 3 and above
+        // how checking works?
+        // - if start and end characters are same and the substring between them is a palindrome, then the whole
+        //   substring is a palindrome
         for (len in 3..n) {
-            for (i in 0 ..< n - len + 1) {
-                val j = i + len - 1
-                if (s[i] == s[j] && dp[i + 1][j - 1]) {
-                    dp[i][j] = true
-                    start = i
+            // ex: n = 5, len = 3 --> [0, 1, 2], [1, 2, 3], [2, 3, 4]
+            for (substrStart in 0..n - len) {
+                val substrEnd = substrStart + len - 1
+                if (s[substrStart] == s[substrEnd] && dp[substrStart + 1][substrEnd - 1]) {
+                    dp[substrStart][substrEnd] = true
+                    start = substrStart
                     maxLength = len
                 }
             }
