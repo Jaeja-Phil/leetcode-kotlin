@@ -27,20 +27,41 @@ package medium
  */
 fun main() {
     fun wordBreak(s: String, wordDict: List<String>): Boolean {
-        val wordSet = wordDict.toSet()
-        val dp = BooleanArray(s.length + 1)
-        dp[0] = true
+        // Solution 1.
+//        val wordSet = wordDict.toSet()
+//        val dp = BooleanArray(s.length + 1)
+//        dp[0] = true
+//
+//        for (i in 1..s.length) {
+//            for (j in 0 until i) {
+//                if (dp[j] && wordSet.contains(s.substring(j, i))) {
+//                    dp[i] = true
+//                    break
+//                }
+//            }
+//        }
+//
+//        return dp[s.length]
 
-        for (i in 1..s.length) {
-            for (j in 0 until i) {
-                if (dp[j] && wordSet.contains(s.substring(j, i))) {
-                    dp[i] = true
-                    break
+        val dp = BooleanArray(s.length + 1) { false }
+        dp[s.length] = true
+
+        for (i in s.lastIndex downTo 0) {
+            for (word in wordDict) {
+                if (
+                // check if i + current word's length is in bounds
+                    i + word.length <= s.length &&
+                    // check if current substring is equal to the word
+                    s.substring(i, i + word.length) == word
+                ) {
+                    // if the substring is equal to the word, check if the next substring is true
+                    dp[i] = dp[i + word.length]
+                    if (dp[i]) break
                 }
             }
         }
 
-        return dp[s.length]
+        return dp[0]
     }
 
     // Test cases
