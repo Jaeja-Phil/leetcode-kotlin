@@ -12,7 +12,7 @@ import java.nio.channels.IllegalChannelGroupException
  *
  * Given an integer array bills where bills[i] is the bill the ith customer pays, return true if you can provide every
  * customer with the correct change, or false otherwise.
- *
+ *w
  * Constraints:
  * - 1 <= bills.length <= 10^5
  * - bills[i] is either 5, 10, or 20.
