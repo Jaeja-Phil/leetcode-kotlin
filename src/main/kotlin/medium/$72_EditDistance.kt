@@ -32,17 +32,18 @@ fun main() {
         // create a 2D array to store the minimum number of operations required to convert word1 to word2
         // + 1 to account for the empty string
         val dp = Array(w1Length + 1) { IntArray(w2Length + 1) }
-        (0..w1Length).forEach { dpRowIdx -> dp[dpRowIdx][0] = dpRowIdx }
-        (0..w2Length).forEach { dpColIdx -> dp[0][dpColIdx] = dpColIdx }
+        (0..w1Length).forEach { w1Idx -> dp[w1Idx][0] = w1Idx } // empty string to word2 means you need to insert all characters
+        (0..w2Length).forEach { w2Idx -> dp[0][w2Idx] = w2Idx } // word1 to empty string means you need to delete all characters
 
-        (1..w1Length).forEach { dpRowIdx ->
-            (1..w2Length).forEach { dpColIdx ->
-                dp[dpRowIdx][dpColIdx] = when {
-                    word1[dpRowIdx - 1] == word2[dpColIdx - 1] -> dp[dpRowIdx - 1][dpColIdx - 1]
+        (1..w1Length).forEach { w1Idx ->
+            (1..w2Length).forEach { w2Idx ->
+                dp[w1Idx][w2Idx] = when {
+                    // if the characters are the same, no operation is needed
+                    word1[w1Idx - 1] == word2[w2Idx - 1] -> dp[w1Idx - 1][w2Idx - 1]
                     else -> 1 + minOf(
-                        dp[dpRowIdx - 1][dpColIdx - 1], // replace
-                        dp[dpRowIdx - 1][dpColIdx], // delete
-                        dp[dpRowIdx][dpColIdx - 1] // insert
+                        dp[w1Idx - 1][w2Idx - 1], // replace
+                        dp[w1Idx - 1][w2Idx], // delete (from word1)
+                        dp[w1Idx][w2Idx - 1], // insert (to word1)
                     )
                 }
             }
