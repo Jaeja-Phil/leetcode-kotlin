@@ -25,8 +25,11 @@ fun main() {
         val tMap = mutableMapOf<Char, Int>()
 
         for (char in t) {
-            tMap[char] = tMap.getOrDefault(char, 0) + 1
-            if (tMap[char]!! > sMap.getOrDefault(char, 0)) return false
+            tMap.getOrDefault(char, 0)
+                .let {
+                    if (it >= sMap.getOrDefault(char, 0)) return false
+                    tMap[char] = it + 1
+                }
         }
 
         return true
