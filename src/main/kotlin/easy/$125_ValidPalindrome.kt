@@ -1,5 +1,7 @@
 package easy
 
+import com.sun.org.apache.xpath.internal.operations.Bool
+
 /**
  * A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all
  * non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters
@@ -27,8 +29,24 @@ package easy
  */
 fun main() {
     fun isPalindrome(s: String): Boolean {
-        val cleanString = s.filter { it.isLetterOrDigit() }.lowercase()
-        return cleanString == cleanString.reversed()
+        // Solution 1. Using filter and reversed.
+//        val cleanString = s.filter { it.isLetterOrDigit() }.lowercase()
+//        return cleanString == cleanString.reversed()
+
+        // Solution 2.
+        var left = 0
+        var right = s.lastIndex
+
+        while (left < right) {
+            while (left < right && !s[left].isLetterOrDigit()) left++
+            while (left < right && !s[right].isLetterOrDigit()) right--
+
+            if (s[left].lowercase() != s[right].lowercase()) return false
+            left++
+            right--
+        }
+
+        return true
     }
 
     val tests = listOf(
