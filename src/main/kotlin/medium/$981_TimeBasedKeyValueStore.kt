@@ -40,17 +40,33 @@ import java.util.*
  */
 fun main() {
     class TimeMap() {
-        private val map = mutableMapOf<String, TreeMap<Int, String>>()
+        private val map = mutableMapOf<String, MutableList<Pair<String, Int>>>()
 
         fun set(key: String, value: String, timestamp: Int) {
-            map.putIfAbsent(key, TreeMap())
-            map[key]!![timestamp] = value
+            val list = map.getOrPut(key) { mutableListOf() }
+            list.add(value to timestamp)
         }
 
         fun get(key: String, timestamp: Int): String {
-            val timeMap = map[key] ?: return ""
-            val entry = timeMap.floorEntry(timestamp)
-            return entry?.value ?: ""
+            var res = ""
+            val list = map[key] ?: return res
+
+            var left = 0
+            var right = list.lastIndex
+
+            while (left <= right) {
+                val mid = (left + right) / 2
+
+                when {
+                    list[mid].second <= timestamp -> {
+                        res = list[mid].first
+                        left = mid + 1
+                    }
+                    else -> right = mid - 1
+                }
+            }
+
+            return res
         }
     }
 
