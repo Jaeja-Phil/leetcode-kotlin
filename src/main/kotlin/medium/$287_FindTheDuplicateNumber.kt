@@ -27,22 +27,33 @@ package medium
  */
 fun main() {
     fun findDuplicate(nums: IntArray): Int {
+        // Solution 1.
+        val seen = mutableSetOf<Int>()
+        for (num in nums) {
+            if (!seen.add(num)) {
+                return num
+            }
+        }
+
+        return -1
+
+        // Solution 2.
         // Floyd's Tortoise and Hare (Cycle Detection) Algorithm
-        var slow = nums[0]
-        var fast = nums[nums[0]]
-
-        while (slow != fast) {
-            slow = nums[slow]
-            fast = nums[nums[fast]]
-        }
-
-        var slow2 = 0
-        while (slow != slow2) {
-            slow = nums[slow]
-            slow2 = nums[slow2]
-        }
-
-        return slow
+//        var slow = nums[0]
+//        var fast = nums[nums[0]]
+//
+//        while (slow != fast) {
+//            slow = nums[slow]
+//            fast = nums[nums[fast]]
+//        }
+//
+//        var slow2 = 0
+//        while (slow != slow2) {
+//            slow = nums[slow]
+//            slow2 = nums[slow2]
+//        }
+//
+//        return slow
     }
 
     println(findDuplicate(intArrayOf(1, 3, 4, 2, 2))) // 2
