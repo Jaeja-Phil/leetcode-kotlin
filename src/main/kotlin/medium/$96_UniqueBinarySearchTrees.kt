@@ -17,15 +17,25 @@ package medium
  */
 fun main() {
     fun numTrees(n: Int): Int {
+        // initialize the dp array, where dp[i] represents the number of unique BSTs that can be formed with i nodes
         val dp = IntArray(n + 1)
+        // dp[0] = 1 because there is one unique BST with 0 nodes (an empty tree)
         dp[0] = 1
+        // dp[1] = 1 because there is one unique BST with 1 node (a single node tree)
         dp[1] = 1
+
+        // fill the dp array
         for (i in 2..n) {
+            // i-th iteration represents the number of unique BSTs that can be formed with i nodes
+            // consider each node as the root, and calculate the number of unique BSTs that can be formed
+            // formula:
+            // dp[i] = sum of left * right subtrees for each possible root
             for (j in 1..i) {
                 dp[i] += dp[j - 1] * dp[i - j]
             }
         }
 
+        // return the number of unique BSTs that can be formed with n nodes
         return dp[n]
     }
 
