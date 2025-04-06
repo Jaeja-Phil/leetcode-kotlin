@@ -34,29 +34,73 @@ package medium
  */
 fun main() {
     fun numIslands(grid: Array<CharArray>): Int {
-        val visited = mutableSetOf<Pair<Int, Int>>()
-        fun dfs(i: Int, j: Int) {
-            if (
-                i to j in visited ||
-                i < 0 || i >= grid.size ||
-                j < 0 || j >= grid[i].size ||
-                grid[i][j] == '0'
-            ) {
-                return
-            }
+        // Solution 1. DFS
+//        val visited = mutableSetOf<Pair<Int, Int>>()
+//        fun dfs(i: Int, j: Int) {
+//            if (
+//                i to j in visited ||
+//                i < 0 || i >= grid.size ||
+//                j < 0 || j >= grid[i].size ||
+//                grid[i][j] == '0'
+//            ) {
+//                return
+//            }
+//
+//            visited.add(i to j)
+//            dfs(i - 1, j)
+//            dfs(i + 1, j)
+//            dfs(i, j - 1)
+//            dfs(i, j + 1)
+//        }
+//
+//        var count = 0
+//        repeat(grid.size) { rowIdx ->
+//            repeat(grid[rowIdx].size) { colIdx ->
+//                if (grid[rowIdx][colIdx] == '1' && rowIdx to colIdx !in visited) {
+//                    dfs(rowIdx, colIdx)
+//                    count++
+//                }
+//            }
+//        }
+//
+//        return count
 
+        // Solution 2. BFS
+        val visited = mutableSetOf<Pair<Int, Int>>()
+        val queue = ArrayDeque<Pair<Int, Int>>()
+        val directions = arrayOf(
+            -1 to 0, // up
+            1 to 0,  // down
+            0 to -1, // left
+            0 to 1   // right
+        )
+        fun bfs(i: Int, j: Int) {
+            queue.add(i to j)
             visited.add(i to j)
-            dfs(i - 1, j)
-            dfs(i + 1, j)
-            dfs(i, j - 1)
-            dfs(i, j + 1)
+
+            while (queue.isNotEmpty()) {
+                val (x, y) = queue.removeFirst()
+                for ((dx, dy) in directions) {
+                    val newX = x + dx
+                    val newY = y + dy
+                    if (
+                        newX in grid.indices &&
+                        newY in grid[newX].indices &&
+                        grid[newX][newY] == '1' &&
+                        newX to newY !in visited
+                    ) {
+                        queue.add(newX to newY)
+                        visited.add(newX to newY)
+                    }
+                }
+            }
         }
 
         var count = 0
         repeat(grid.size) { rowIdx ->
             repeat(grid[rowIdx].size) { colIdx ->
                 if (grid[rowIdx][colIdx] == '1' && rowIdx to colIdx !in visited) {
-                    dfs(rowIdx, colIdx)
+                    bfs(rowIdx, colIdx)
                     count++
                 }
             }
