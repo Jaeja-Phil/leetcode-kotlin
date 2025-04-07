@@ -36,28 +36,88 @@ package medium
  */
 fun main() {
     fun maxAreaOfIsland(grid: Array<IntArray>): Int {
-        val visited = mutableSetOf<Pair<Int, Int>>()
-        var maxArea = 0
+        // Solution 1. DFS
+//        val visited = mutableSetOf<Pair<Int, Int>>()
+//        var maxArea = 0
+//
+//        fun dfs(x: Int, y: Int): Int {
+//            if (x !in grid.indices || y !in grid[x].indices || grid[x][y] == 0 || x to y in visited) {
+//                return 0
+//            }
+//
+//            visited.add(x to y)
+//            var ans = 1 // to account for the current cell
+//            ans += dfs(x + 1, y) // down
+//            ans += dfs(x - 1, y) // up
+//            ans += dfs(x, y + 1) // right
+//            ans += dfs(x, y - 1) // left
+//
+//            return ans
+//        }
+//
+//        repeat(grid.size) { rowIdx ->
+//            repeat(grid[rowIdx].size) { colIdx ->
+//                if (grid[rowIdx][colIdx] == 1 && rowIdx to colIdx !in visited) {
+//                    maxArea = maxOf(maxArea, dfs(rowIdx, colIdx))
+//                }
+//            }
+//        }
+//
+//        return maxArea
 
-        fun dfs(x: Int, y: Int): Int {
-            if (x !in grid.indices || y !in grid[x].indices || grid[x][y] == 0 || x to y in visited) {
-                return 0
+        // Solution 2. Disjoint Set Union (DSU)
+        val rows = grid.size
+        val cols = grid[0].size
+        val parent = IntArray(rows * cols) { it }
+        val size = IntArray(rows * cols) { 1 }
+        val directions = arrayOf(
+            intArrayOf(0, 1), // right
+            intArrayOf(1, 0), // down
+            intArrayOf(0, -1), // left
+            intArrayOf(-1, 0) // up
+        )
+
+        fun find(x: Int): Int {
+            if (parent[x] != x) {
+                parent[x] = find(parent[x])
             }
-
-            visited.add(x to y)
-            var ans = 1 // to account for the current cell
-            ans += dfs(x + 1, y) // down
-            ans += dfs(x - 1, y) // up
-            ans += dfs(x, y + 1) // right
-            ans += dfs(x, y - 1) // left
-
-            return ans
+            return parent[x]
         }
 
-        repeat(grid.size) { rowIdx ->
-            repeat(grid[rowIdx].size) { colIdx ->
-                if (grid[rowIdx][colIdx] == 1 && rowIdx to colIdx !in visited) {
-                    maxArea = maxOf(maxArea, dfs(rowIdx, colIdx))
+        fun union(x: Int, y: Int) {
+            val rootX = find(x)
+            val rootY = find(y)
+            if (rootX != rootY) {
+                if (size[rootX] < size[rootY]) {
+                    parent[rootX] = rootY
+                    size[rootY] += size[rootX]
+                } else {
+                    parent[rootY] = rootX
+                    size[rootX] += size[rootY]
+                }
+            }
+        }
+
+        for (i in 0 ..< rows) {
+            for (j in 0 ..< cols) {
+                if (grid[i][j] == 1) {
+                    for (dir in directions) {
+                        val newRow = i + dir[0]
+                        val newCol = j + dir[1]
+                        if (newRow in 0 ..< rows && newCol in 0 ..< cols && grid[newRow][newCol] == 1) {
+                            union(i * cols + j, newRow * cols + newCol)
+                        }
+                    }
+                }
+            }
+        }
+
+        var maxArea = 0
+        for (i in 0 ..< rows) {
+            for (j in 0 ..< cols) {
+                if (grid[i][j] == 1) {
+                    val root = find(i * cols + j)
+                    maxArea = maxOf(maxArea, size[root])
                 }
             }
         }
