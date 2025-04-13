@@ -43,35 +43,42 @@ package medium
  */
 fun main() {
     fun checkIfPrerequisite(numCourses: Int, prerequisites: Array<IntArray>, queries: Array<IntArray>): List<Boolean> {
-        val graph = mutableMapOf<Int, MutableSet<Int>>()
-        repeat(numCourses) {
-            graph[it] = mutableSetOf()
+        val prerequisiteMap = mutableMapOf<Int, MutableSet<Int>>()
+        repeat(numCourses) { course ->
+            prerequisiteMap[course] = mutableSetOf()
         }
-        prerequisites.forEach { (prereq, course) ->
-            graph[course]!!.add(prereq)
+        prerequisites.forEach { (prerequisite, course) ->
+            prerequisiteMap[course]!!.add(prerequisite)
         }
 
         val dp = mutableMapOf<Int, MutableSet<Int>>()
 
-        fun dfs(course: Int): Set<Int> {
-            dp[course]?.let { return it }
-
-            val set = mutableSetOf<Int>()
-            set.add(course)
-            for (prereq in graph[course]!!) {
-                set.addAll(dfs(prereq))
+        fun dfs(course: Int): MutableSet<Int> {
+            if (course in dp) return dp[course]!!
+            if (prerequisiteMap[course]!!.isEmpty()) {
+                dp[course] = mutableSetOf()
+                return dp[course]!!
             }
-            dp[course] = set
 
-            return set
+            val directAndIndirectPrerequisites = mutableSetOf<Int>()
+
+            for (prerequisite in prerequisiteMap[course]!!) {
+                val currDirectAndIndirectPrerequisites = dfs(prerequisite) + prerequisite
+                directAndIndirectPrerequisites.addAll(currDirectAndIndirectPrerequisites)
+            }
+
+            dp[course] = directAndIndirectPrerequisites
+
+            return dp[course]!!
         }
 
         repeat(numCourses) {
             dfs(it)
         }
 
-        return queries.map { (course, prereq) ->
-            dp[prereq]!!.contains(course)
+
+        return queries.map { (prerequisite, course) ->
+            prerequisite in dp[course]!!
         }
     }
 
