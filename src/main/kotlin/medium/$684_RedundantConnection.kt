@@ -30,38 +30,76 @@ package medium
  */
 fun main() {
     fun findRedundantConnection(edges: Array<IntArray>): IntArray {
-        val graph = mutableMapOf<Int, MutableSet<Int>>()
-        for (i in 1..edges.size) {
-            graph[i] = mutableSetOf()
+        // Solution 1. dfs
+//        val graph = mutableMapOf<Int, MutableSet<Int>>()
+//        for (i in 1..edges.size) {
+//            graph[i] = mutableSetOf()
+//        }
+//
+//        // check if it is possible to reach the target node from the source node
+//        fun dfs(
+//            src: Int,
+//            target: Int,
+//            visited: MutableSet<Int> = mutableSetOf(),
+//        ): Boolean {
+//            if (src == target) {
+//                return true
+//            }
+//
+//            visited.add(src)
+//            for (neighbor in graph[src]!!) {
+//                if (neighbor !in visited && dfs(neighbor, target, visited)) {
+//                    return true
+//                }
+//            }
+//
+//            return false
+//        }
+//
+//        for ((src, dest) in edges) {
+//            if (dfs(src, dest)) {
+//                return intArrayOf(src, dest)
+//            }
+//
+//            graph[src]!!.add(dest)
+//            graph[dest]!!.add(src)
+//        }
+//
+//        return intArrayOf()
+
+        // Solution 2. Disjoint Set Union (DSU)
+        val n = edges.size
+        val parent = IntArray(n + 1) { it }
+        val rank = IntArray(n + 1) { 1 }
+
+        fun find(x: Int): Int {
+            if (parent[x] != x) {
+                parent[x] = find(parent[x])
+            }
+            return parent[x]
         }
 
-        // check if it is possible to reach the target node from the source node
-        fun dfs(
-            src: Int,
-            target: Int,
-            visited: MutableSet<Int> = mutableSetOf(),
-        ): Boolean {
-            if (src == target) {
-                return true
+        fun union(x: Int, y: Int): Boolean {
+            val rootX = find(x)
+            val rootY = find(y)
+            if (rootX == rootY) {
+                return false
             }
-
-            visited.add(src)
-            for (neighbor in graph[src]!!) {
-                if (neighbor !in visited && dfs(neighbor, target, visited)) {
-                    return true
-                }
+            if (rank[rootX] < rank[rootY]) {
+                parent[rootX] = rootY
+            } else if (rank[rootX] > rank[rootY]) {
+                parent[rootY] = rootX
+            } else {
+                parent[rootY] = rootX
+                rank[rootX]++
             }
-
-            return false
+            return true
         }
 
-        for ((src, dest) in edges) {
-            if (dfs(src, dest)) {
-                return intArrayOf(src, dest)
+        for ((u, v) in edges) {
+            if (!union(u, v)) {
+                return intArrayOf(u, v)
             }
-
-            graph[src]!!.add(dest)
-            graph[dest]!!.add(src)
         }
 
         return intArrayOf()
