@@ -24,13 +24,39 @@ package easy
  */
 fun main() {
     fun minCostClimbingStairs(cost: IntArray): Int {
-        val dp = IntArray(3)
-        for (i in 2..cost.size) {
-            dp[2] = minOf(dp[0] + cost[i - 2], dp[1] + cost[i - 1])
-            dp[0] = dp[1]
-            dp[1] = dp[2]
+        // Recursion with memoization
+        val memo = IntArray(cost.size + 1) { -1 }
+        fun minCost(i: Int): Int {
+            if (i <= 1) return 0
+            if (memo[i] != -1) return memo[i]
+            memo[i] = minOf(minCost(i - 1) + cost[i - 1], minCost(i - 2) + cost[i - 2])
+            return memo[i]
         }
-        return dp[2]
+
+        return minCost(cost.size)
+
+        // Dynamic programming
+//        val dp = IntArray(cost.size + 1)
+//        dp[0] = 0 // cost to reach step 0
+//        dp[1] = 0 // cost to reach step 1
+//        for (i in 2..cost.size) {
+//            dp[i] =
+//                minOf(
+//                    dp[i - 1] + cost[i - 1],
+//                    dp[i - 2] + cost[i - 2]
+//                )
+//        }
+//
+//        return dp[cost.size] // cost to reach the top
+
+        // Space optimized dynamic programming
+//        val dp = IntArray(3)
+//        for (i in 2..cost.size) {
+//            dp[2] = minOf(dp[0] + cost[i - 2], dp[1] + cost[i - 1])
+//            dp[0] = dp[1]
+//            dp[1] = dp[2]
+//        }
+//        return dp[2]
     }
 
     val input = intArrayOf(10, 15, 20)
