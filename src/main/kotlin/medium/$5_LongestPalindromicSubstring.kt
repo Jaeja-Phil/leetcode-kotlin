@@ -18,41 +18,52 @@ package medium
  */
 fun main() {
     fun longestPalindrome(s: String): String {
-        val n = s.length
-        val dp = Array(n) { BooleanArray(n) }
+        // base case
+        if (s.length <= 1) return s
+
+        var maxLen = 1
         var start = 0
-        var maxLength = 1
+        // dp[i][j] = true if s[i..j] is a palindrome
+        val dp = Array(s.length) { BooleanArray(s.length) }
 
-        for (i in 0 ..< n) {
-            // for every single character, it is a palindrome
-            dp[i][i] = true
-            // for every two characters, if they are the same, it is a palindrome
-            // but, need to check if n + 1 is in bounds
-            if (i < n - 1 && s[i] == s[i + 1]) {
-                dp[i][i + 1] = true
-                start = i
-                maxLength = 2
-            }
-        }
+        for(i in s.indices) {
+            println("--------------- Doing index: $i ---------------")
+            dp[i][i] = true // every single character itself is a palindrome
+            /**
+             * iterating like..
+             * [i, j]
+             * [1, 0]
+             * [2, 0], [2, 1]
+             * [3, 0], [3, 1], [3, 2]
+             * ...
+             */
+            for (j in 0..<i) {
+                println("i: $i, j: $j")
+                // for every two characters, if they are the same, it is a palindrome
+                if (s[i] == s[j]) {
+                    if (i - j <= 2) {
+                        // if the length of the substring is 2 or less, it is a palindrome
+                        dp[j][i] = true
+                    } else {
+                        // if the length of the substring is more than 2, check if the substring between them is a palindrome
+                        dp[j][i] = dp[j + 1][i - 1]
+                    }
 
-        // now, with every single character and two characters(which are adjacent to the single character) are checked
-        // for palindrome, we can check for length 3 and above
-        // how checking works?
-        // - if start and end characters are same and the substring between them is a palindrome, then the whole
-        //   substring is a palindrome
-        for (len in 3..n) {
-            // ex: n = 5, len = 3 --> [0, 1, 2], [1, 2, 3], [2, 3, 4]
-            for (substrStart in 0..n - len) {
-                val substrEnd = substrStart + len - 1
-                if (s[substrStart] == s[substrEnd] && dp[substrStart + 1][substrEnd - 1]) {
-                    dp[substrStart][substrEnd] = true
-                    start = substrStart
-                    maxLength = len
+                    // if the substring is a palindrome and its length is greater than maxLen, update maxLen and start
+                    if (dp[j][i] && i - j + 1 > maxLen) {
+                        maxLen = i - j + 1
+                        start = j
+                    }
                 }
+
+                println("[")
+                dp.forEach { println("[${it.joinToString(", ")}]") }
+                println("]")
+                println()
             }
         }
 
-        return s.substring(start, start + maxLength)
+        return s.substring(start, start + maxLen)
     }
 
     val s1 = "babad"
