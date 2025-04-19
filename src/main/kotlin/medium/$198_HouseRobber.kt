@@ -26,6 +26,26 @@ package medium
  */
 fun main() {
     fun rob(nums: IntArray): Int {
+        /**
+         * Recursion
+         */
+        val memo = IntArray(nums.size + 1) { -1 }
+        val n = nums.size
+        fun dfs(idx: Int): Int {
+            if (idx >= n) return 0
+            if (memo[idx] != -1) return memo[idx]
+
+            memo[idx] = maxOf(
+                nums[idx] + dfs(idx + 2), // rob this house and skip the next one
+                dfs(idx + 1), // skip this house
+            )
+
+            return memo[idx]
+        }
+
+        return dfs(0)
+
+
         // base case
         if (nums.isEmpty()) return 0
         if (nums.size <= 2) return nums.max()
