@@ -31,24 +31,45 @@ fun main() {
     }
 
     fun countSubstrings(s: String): Int {
-        val n = s.length
-        val dp = Array(n) { BooleanArray(n) }
-        var count = 0
+        // Solution 1. DP
+//        val n = s.length
+//        val dp = Array(n) { BooleanArray(n) }
+//        var count = 0
+//
+//        for (end in 0..dp.lastIndex) {
+//            for (start in 0..end) {
+//                if (
+//                    s[start] == s[end] &&
+//                    (end - start <= 2 || dp[start + 1][end - 1])
+//                ) {
+//                    dp[start][end] = true
+//                    count++
+//                }
+//            }
+//        }
+//
+//        return count
 
-        for (start in dp.lastIndex downTo 0) {
-            for (end in start..dp.lastIndex) {
-                if (
-                    s[start] == s[end] &&
-                    (end - start <= 2 || dp[start + 1][end - 1])
-                ) {
-                    dp[start][end] = true
-                    count++
-                }
-                // printDP(dp)
+        // Solution 2. Two Pointers
+        fun countPalindromes(l: Int, r: Int): Int {
+            var left = l
+            var right = r
+            var count = 0
+            while (left >= 0 && right < s.length && s[left] == s[right]) {
+                count++
+                left--
+                right++
             }
+            return count
         }
 
-        return count
+        var res = 0
+        for (i in s.indices) {
+            res += countPalindromes(i, i) // Odd length palindromes
+            res += countPalindromes(i, i + 1) // Even length palindromes
+        }
+
+        return res
     }
 
     val tests = listOf(
