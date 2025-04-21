@@ -28,18 +28,24 @@ package medium
  */
 fun main() {
     fun coinChange(coins: IntArray, amount: Int): Int {
+        // Initialize with a value greater than amount because coins[i] is guaranteed to be at least 1,
+        // and we want to find the minimum number of coins.
         val dp = IntArray(amount + 1) { amount + 1 }
-        dp[0] = 0 // 0 amount can be made with 0 coins
+        dp[0] = 0 // 0 can be made with 0 coins
 
         for (i in 1..amount) {
             for (coin in coins) {
                 if (coin <= i) {
+                    // If the coin can be used, update the dp array
+                    // we can take...
+                    // - the previous value (dp[i])
+                    // - OR the value of dp[i - coin] + 1 (using this coin)
                     dp[i] = minOf(dp[i], dp[i - coin] + 1)
                 }
             }
         }
 
-        return if (dp[amount] > amount) -1 else dp[amount]
+        return dp[amount].takeIf { it != amount + 1 } ?: -1
     }
 
     val coins1 = intArrayOf(1, 2, 5)
