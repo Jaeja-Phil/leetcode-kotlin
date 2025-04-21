@@ -56,9 +56,11 @@ fun main() {
             val twoDigits = s.substring(i - 2, i).toInt()
 
             if (oneDigit in 1..9) {
+                // since this is a valid single digit, we can add the number of ways to decode the previous digit
                 dp[i] += dp[i - 1]
             }
             if (twoDigits in 10..26) {
+                // since this is a valid two digit number, we can add the number of ways to decode the previous two digits
                 dp[i] += dp[i - 2]
             }
         }
