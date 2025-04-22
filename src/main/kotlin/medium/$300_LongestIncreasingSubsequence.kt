@@ -23,6 +23,36 @@ package medium
 fun main() {
     /**
      * solution 1: dynamic programming
+     *
+     * Intuition:
+     * At each index "i", we want to know:
+     * > "what is the LIS that ends at index i?"
+     *
+     * To find this, we look at all previous indices j < i.
+     * If nums[j] < nums[i], it means nums[i] can extend the LIS that ends at index j.
+     *
+     * So we can say:
+     * > dp[i] = maxOf(dp[i], dp[j] + 1)
+     *
+     * We also initialize dp[i] to 1, because the LIS that ends at index i is at least 1 (the number itself).
+     *
+     * Ex)
+     * nums = [10, 9, 2, 5, 3, 7, 101, 18]
+     * initialize dp = [1, 1, 1, 1, 1, 1, 1, 1]
+     *
+     * i = 0, j = 0 --> do nothing (no j < i)
+     * i = 1, j = 0 --> nums[1] < nums[0] --> do nothing
+     * i = 2, j = 0 --> nums[2] < nums[0] --> do nothing
+     * i = 2, j = 1 --> nums[2] < nums[1] --> do nothing
+     * i = 3, j = 0 --> nums[3] < nums[0] --> do nothing
+     * i = 3, j = 1 --> nums[3] < nums[1] --> do nothing
+     * i = 3, j = 2 --> nums[3] > nums[2] --> dp[3] = maxOf(dp[3], dp[2] + 1) = maxOf(1, 1 + 1) = 2
+     * i = 4, j = 0 --> nums[4] < nums[0] --> do nothing
+     * ...
+     *
+     * resulting dp = [1, 1, 1, 2, 2, 3, 4, 4]
+     *
+     * Finally, we return the maximum value in dp, which is the length of the longest increasing subsequence.
      */
     fun lengthOfLIS(nums: IntArray): Int {
         val dp = IntArray(nums.size) { 1 }
@@ -33,7 +63,7 @@ fun main() {
                 }
             }
         }
-        return dp.last()
+        return dp.max()
     }
 
     /**
