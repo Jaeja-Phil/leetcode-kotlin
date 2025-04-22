@@ -20,21 +20,41 @@ package medium
  */
 fun main() {
     fun canPartition(nums: IntArray): Boolean {
+        // Solution 1. Dynamic Programming
+//        val sum = nums.sum()
+//        if (sum % 2 != 0) return false
+//
+//        val target = sum / 2
+//        val dp = BooleanArray(target + 1)
+//        dp[0] = true
+//
+//        for (num in nums) {
+//            for (i in target downTo num) {
+//                dp[i] = dp[i] || dp[i - num]
+//                if (dp[target]) return true
+//            }
+//        }
+//
+//        return dp[target]
+
+        // Solution 2. set
         val sum = nums.sum()
         if (sum % 2 != 0) return false
 
         val target = sum / 2
-        val dp = BooleanArray(target + 1)
-        dp[0] = true
+        val set = mutableSetOf(0)
 
         for (num in nums) {
-            for (i in target downTo num) {
-                dp[i] = dp[i] || dp[i - num]
-                if (dp[target]) return true
+            val newSet = mutableSetOf<Int>()
+            for (s in set) {
+                val newSum = s + num
+                if (newSum == target) return true
+                if (newSum < target) newSet.add(newSum)
             }
+            set.addAll(newSet)
         }
 
-        return dp[target]
+        return false
     }
 
     println(canPartition(intArrayOf(1, 5, 11, 5))) // true
