@@ -27,16 +27,34 @@ package medium
  */
 fun main() {
     fun lastStoneWeight(stones: IntArray): Int {
+        /**
+         * compute the total weight of stones and set target to half of the total weight
+         * - why? because we want to find the closest sum to half of the total weight
+         */
         val stoneSum = stones.sum()
         val target = stoneSum / 2
-        val dp = IntArray(target + 1)
+        val dp = IntArray(target + 1) // dp[i] = max achievable subset sum that does not exceed i
 
+        /**
+         * for each stone, we iterate from target down to stone
+         * option 1: dont take this stone => dp[i]
+         * option 2: take this stone => dp[i - stone] + stone
+         * take the max of both options => dp[i] = maxOf(dp[i], dp[i - stone] + stone)
+         * **Note**
+         * - scanning backwards is important to avoid using the same stone multiple times
+         *   (because we never reuse the updated dp[i] in the same iteration)
+         */
         for (stone in stones) {
             for (i in target downTo stone) {
                 dp[i] = maxOf(dp[i], dp[i - stone] + stone)
             }
         }
 
+        /**
+         * dp[target] holds the closest sum to half of the total weight
+         * therefore, the smallest possible weight of the last stone is:
+         * total weight - (2 * closest sum to half of the total weight)
+         */
         return stoneSum - 2 * dp[target]
     }
 
