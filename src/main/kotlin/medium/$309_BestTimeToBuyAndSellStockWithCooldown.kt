@@ -27,20 +27,31 @@ fun main() {
         val n = prices.size
         if (n == 1) return 0
 
+        // dp[i][0] = max profit on day i with no stock
+        // dp[i][1] = max profit on day i with stock
         val dp = Array(n) { IntArray(2) }
-        dp[0][0] = 0
-        dp[0][1] = -prices[0]
-        dp[1][0] = maxOf(dp[0][0], dp[0][1] + prices[1])
-        dp[1][1] = maxOf(dp[0][1], dp[0][0] - prices[1])
+        dp[0][0] = 0 // day 0, no stock: 0 profit
+        dp[0][1] = -prices[0] // day 0, buy stock: profit negative cost
+        dp[1][0] = maxOf(dp[0][0], dp[0][1] + prices[1]) // do nothing, or sell stock today
+        dp[1][1] = maxOf(dp[0][1], dp[0][0] - prices[1]) // do nothing, or buy stock today
 
         for (i in 2..<n) {
-            // try to sell
-            dp[i][0] = maxOf(dp[i - 1][0], dp[i - 1][1] + prices[i])
+            dp[i][0] = maxOf(
+                // do nothing
+                dp[i - 1][0],
+                // sell stock today
+                dp[i - 1][1] + prices[i]
+            )
 
-            // try to buy
-            dp[i][1] = maxOf(dp[i - 1][1], dp[i - 2][0] - prices[i])
+            dp[i][1] = maxOf(
+                // do nothing
+                dp[i - 1][1],
+                // buy stock today with cooldown (hence i - 2)
+                dp[i - 2][0] - prices[i]
+            )
         }
 
+        // The maximum profit on the last day with no stock
         return dp[n - 1][0]
     }
 
