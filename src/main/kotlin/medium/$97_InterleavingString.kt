@@ -23,26 +23,45 @@ package medium
  */
 fun main() {
     fun isInterleave(s1: String, s2: String, s3: String): Boolean {
-        // base case
         if (s1.length + s2.length != s3.length) return false
 
+        // dp[i][j] means s1[0..i-1] and s2[0..j-1] can form s3[0..i+j-1]
         val dp = Array(s1.length + 1) { BooleanArray(s2.length + 1) }
+        dp[0][0] = true // base case, when both s1 and s2 are empty, they can form s3 which is also empty
 
-        for (i in 0..s1.length) {
-            for (j in 0..s2.length) {
-                if (i == 0 && j == 0) {
-                    dp[i][j] = true
-                } else if (i == 0) {
-                    dp[i][j] = dp[i][j - 1] && s2[j - 1] == s3[j - 1]
-                } else if (j == 0) {
-                    dp[i][j] = dp[i - 1][j] && s1[i - 1] == s3[i - 1]
-                } else {
-                    dp[i][j] = (dp[i - 1][j] && s1[i - 1] == s3[i + j - 1]) ||
-                            (dp[i][j - 1] && s2[j - 1] == s3[i + j - 1])
+        // Fill the first column
+        for (i in 1..s1.length) {
+            dp[i][0] = dp[i - 1][0] && s1[i - 1] == s3[i - 1]
+        }
+
+        // Fill the first row
+        for (j in 1..s2.length) {
+            dp[0][j] = dp[0][j - 1] && s2[j - 1] == s3[j - 1]
+        }
+
+        // Fill the rest with the dp table
+        for (i in 1..s1.length) {
+            for (j in 1..s2.length) {
+                dp[i][j] = when {
+                    /**
+                     * when dp[i - 1][j] is true (meaning that s1[0..i-2] and s2[0..j-1] can form s3[0..i+j-2])
+                     * and current character of s1 (s1[i - 1]) is equal to current character of s3 (s3[i + j - 1])
+                     * --> means we can take interleave successfully
+                     */
+                    dp[i - 1][j] && s1[i - 1] == s3[i + j - 1] -> true
+                    /**
+                     * when dp[i][j - 1] is true (meaning that s1[0..i-1] and s2[0..j-2] can form s3[0..i+j-2])
+                     * and current character of s2 (s2[j - 1]) is equal to current character of s3 (s3[i + j - 1])
+                     * --> means we can take interleave successfully
+                     */
+                    dp[i][j - 1] && s2[j - 1] == s3[i + j - 1] -> true
+                    // otherwise, we cannot interleave successfully with the current characters
+                    else -> false
                 }
             }
         }
 
+        // return the result of the last cell in the dp table, which represents s1 and s2 can form s3
         return dp[s1.length][s2.length]
     }
 
@@ -55,5 +74,4 @@ fun main() {
     val s5 = "dbbca"
     val s6 = "aadbbbaccc"
     println(isInterleave(s4, s5, s6)) // false
-
 }
