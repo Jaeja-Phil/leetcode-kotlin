@@ -27,21 +27,45 @@ package medium
  */
 fun main() {
     fun eraseOverlapIntervals(intervals: Array<IntArray>): Int {
-        // base case
-        if (intervals.size <= 1) return 0
-
-        // sort intervals by end time
-        intervals.sortBy { it[1] }
+        intervals.sortBy { it[0] }
 
         var count = 0
-        var end = intervals[0][1]
-        for (i in 1 ..< intervals.size) {
-            if (intervals[i][0] < end) {
-                count++
+        var prevEnd = intervals[0][1]
+        for (i in 1..intervals.lastIndex) {
+            val (start, end) = intervals[i]
+            if (start >= prevEnd) {
+                prevEnd = end // there is no overlap, update prevEnd
             } else {
-                end = intervals[i][1]
+                count++ // there is an overlap, increment count
+                prevEnd = minOf(prevEnd, end) // update prevEnd to the minimum end time
+                /**
+                 * why update prevEnd to the minimum end time?
+                 * because eliminating interval with bigger end time will allow more intervals to be included
+                 */
             }
         }
+
         return count
     }
+
+    val intervals = arrayOf(
+        intArrayOf(1, 2),
+        intArrayOf(2, 3),
+        intArrayOf(3, 4),
+        intArrayOf(1, 3)
+    )
+    println(eraseOverlapIntervals(intervals)) // Output: 1
+
+    val intervals2 = arrayOf(
+        intArrayOf(1, 2),
+        intArrayOf(1, 2),
+        intArrayOf(1, 2)
+    )
+    println(eraseOverlapIntervals(intervals2)) // Output: 2
+
+    val intervals3 = arrayOf(
+        intArrayOf(1, 2),
+        intArrayOf(2, 3)
+    )
+    println(eraseOverlapIntervals(intervals3)) // Output: 0
 }
