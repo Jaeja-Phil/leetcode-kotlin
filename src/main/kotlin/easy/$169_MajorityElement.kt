@@ -40,8 +40,25 @@ fun main() {
     }
 
     fun majorityElementMySolution(nums: IntArray): Int {
-        nums.sort()
-        return nums[nums.size / 2]
+        // Solution 1. using sorting
+//        nums.sort()
+//        return nums[nums.size / 2]
+
+        // Solution 2. using hashmap
+        val countMap = hashMapOf<Int, Int>()
+        var res = 0
+        var maxCount = 0
+
+        for (num in nums) {
+            val newCount = countMap.getOrDefault(num, 0) + 1
+            countMap[num] = newCount
+            if (newCount > maxCount) {
+                res = num
+                maxCount = newCount
+            }
+        }
+
+        return res
     }
 
     println(majorityElement(intArrayOf(3, 2, 3))) // 3
