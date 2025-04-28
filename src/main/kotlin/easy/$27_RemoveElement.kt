@@ -70,13 +70,27 @@ fun main() {
 //        return count
 
         // Solution 2.
+//        var left = 0
+//        nums.forEachIndexed { index, num ->
+//            if (num != `val`) {
+//                nums[left++] = nums[index]
+//            }
+//        }
+//        return left
+
+        // Solution 3
         var left = 0
-        nums.forEachIndexed { index, num ->
-            if (num != `val`) {
-                nums[left++] = nums[index]
+        var right = nums.size
+
+        while (left < right) {
+            if (nums[left] == `val`) {
+                nums[left] = nums[--right]
+            } else {
+                left++
             }
         }
-        return left
+
+        return right
     }
 
     val nums1 = intArrayOf(3, 2, 2, 3)
