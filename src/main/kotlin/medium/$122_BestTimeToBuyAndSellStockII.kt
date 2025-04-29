@@ -35,13 +35,39 @@ package medium
  */
 fun main() {
     fun maxProfit(prices: IntArray): Int {
-        var profit = 0
+        // Solution 1. Greedy
+        // whenever profit is positive, add it to the total profit
+//        var profit = 0
+//        for (i in 1 .. prices.lastIndex) {
+//            if (prices[i] > prices[i - 1]) {
+//                profit += prices[i] - prices[i - 1]
+//            }
+//        }
+//        return profit
+
+        // Solution 2. Dynamic Programming
+        // 0: max profit when holding stock, 1: max profit when not holding stock
+        val dp = Array(prices.size) { IntArray(2) }
+
+        dp[0][0] = -prices[0] // buy on day 0
+        dp[0][1] = 0 // since we haven't sold anything yet, profit is 0
+
         for (i in 1 .. prices.lastIndex) {
-            if (prices[i] > prices[i - 1]) {
-                profit += prices[i] - prices[i - 1]
-            }
+            dp[i][0] = maxOf(
+                // hold the stock from previous day
+                dp[i - 1][0],
+                // buy the stock today
+                dp[i - 1][1] - prices[i]
+            )
+            dp[i][1] = maxOf(
+                // do nothing from previous day (keep not holding stock)
+                dp[i - 1][1],
+                // sell the stock today
+                dp[i - 1][0] + prices[i]
+            )
         }
-        return profit
+        // max profit when not holding stock on the last day
+        return dp[prices.lastIndex][1]
     }
 
     println(maxProfit(intArrayOf(7, 1, 5, 3, 6, 4))) // 7
