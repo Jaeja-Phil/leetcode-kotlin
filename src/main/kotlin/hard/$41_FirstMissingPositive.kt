@@ -27,13 +27,14 @@ fun main() {
         val n = nums.size
 
         for (i in nums.indices) {
+            val numAtI = nums[i]
             while (
                 // check if the current number is in the range of 1 to n
-                nums[i] in 1..n &&
+                numAtI in 1..n &&
                 // check if the current number is not in the correct position
-                nums[i] != i + 1 &&
+                numAtI != i + 1 &&
                 // check if the current number is not equal to the number at the correct position
-                nums[nums[i] - 1] != nums[i]
+                nums[numAtI - 1] != numAtI
             ) {
                 // swap the current number with the number at the correct position
                 nums[i] = nums[nums[i] - 1].also { nums[nums[i] - 1] = nums[i] }
