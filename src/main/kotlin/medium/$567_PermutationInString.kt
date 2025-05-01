@@ -20,28 +20,70 @@ package medium
  */
 fun main() {
     fun checkInclusion(s1: String, s2: String): Boolean {
-        val s1CharCountMap = s1.groupingBy { it }.eachCount().toMutableMap()
+        // Solution 1
+//        val s1CharCountMap = s1.groupingBy { it }.eachCount().toMutableMap()
+//        var left = 0
+//        val charCountMap = mutableMapOf<Char, Int>()
+//        for (right in s2.indices) {
+//            val rightChar = s2[right]
+//            charCountMap[rightChar] = charCountMap.getOrDefault(rightChar, 0) + 1
+//            if (right - left + 1 < s1.length) {
+//                continue
+//            }
+//
+//            if (charCountMap == s1CharCountMap) {
+//                return true
+//            }
+//
+//            charCountMap[s2[left]] = charCountMap[s2[left]]!! - 1
+//            if (charCountMap[s2[left]] == 0) {
+//                charCountMap.remove(s2[left])
+//            }
+//            left++
+//        }
+//
+//        return false
+
+        // Solution 2
+        if (s1.length > s2.length) return false
+
+        val s1CharCountMap = IntArray(26)
+        val s2CharCountMap = IntArray(26)
+        for (i in s1.indices) {
+            s1CharCountMap[s1[i] - 'a']++
+            s2CharCountMap[s2[i] - 'a']++
+        }
+
+        var matches = 0
+        for (i in 0..<26) {
+            if (s1CharCountMap[i] == s2CharCountMap[i]) {
+                matches++
+            }
+        }
+
         var left = 0
-        val charCountMap = mutableMapOf<Char, Int>()
-        for (right in s2.indices) {
-            val rightChar = s2[right]
-            charCountMap[rightChar] = charCountMap.getOrDefault(rightChar, 0) + 1
-            if (right - left + 1 < s1.length) {
-                continue
+        for (right in s1.length..<s2.length) {
+            if (matches == 26) return true
+
+            val index = s2[right] - 'a'
+            s2CharCountMap[index]++
+            if (s2CharCountMap[index] == s1CharCountMap[index]) {
+                matches++
+            } else if (s2CharCountMap[index] == s1CharCountMap[index] + 1) {
+                matches--
             }
 
-            if (charCountMap == s1CharCountMap) {
-                return true
-            }
-
-            charCountMap[s2[left]] = charCountMap[s2[left]]!! - 1
-            if (charCountMap[s2[left]] == 0) {
-                charCountMap.remove(s2[left])
+            val leftIndex = s2[left] - 'a'
+            s2CharCountMap[leftIndex]--
+            if (s2CharCountMap[leftIndex] == s1CharCountMap[leftIndex]) {
+                matches++
+            } else if (s2CharCountMap[leftIndex] + 1 == s1CharCountMap[leftIndex]) {
+                matches--
             }
             left++
         }
 
-        return false
+        return matches == 26
     }
 
     println(checkInclusion("ab", "eidbaooo")) // true
