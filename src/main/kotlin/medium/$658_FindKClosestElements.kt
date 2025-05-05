@@ -24,46 +24,61 @@ package medium
  */
 fun main() {
     fun findClosestElements(arr: IntArray, k: Int, x: Int): List<Int> {
-        // base case
-        if (arr.size <= k) return arr.toList()
+//        // base case
+//        if (arr.size <= k) return arr.toList()
+//
+//        var left = 0
+//        var right = arr.lastIndex
+//        // find where x is located OR x should be inserted
+//        while (left <= right) {
+//            val mid = (left + right) / 2
+//            when {
+//                arr[mid] > x -> right = mid - 1
+//                arr[mid] < x -> left = mid + 1
+//                else -> {
+//                    left = mid
+//                    break
+//                }
+//            }
+//        }
+//
+//        if (left == 0) {
+//            return arr.slice(0..< k)
+//        }
+//
+//        // find k closest elements
+//        var i = left
+//        var j = left
+//        while (j - i < k) {
+//            if (i == 0) {
+//                j++
+//            } else if (j == arr.size) {
+//                i--
+//            } else {
+//                if (x - arr[i - 1] <= arr[j] - x) {
+//                    i--
+//                } else {
+//                    j++
+//                }
+//            }
+//        }
+//
+//        return arr.slice(i ..< j)
 
+        // binary search solution
         var left = 0
-        var right = arr.lastIndex
-        // find where x is located OR x should be inserted
-        while (left <= right) {
-            val mid = (left + right) / 2
-            when {
-                arr[mid] > x -> right = mid - 1
-                arr[mid] < x -> left = mid + 1
-                else -> {
-                    left = mid
-                    break
-                }
-            }
-        }
+        var right = arr.size - k
 
-        if (left == 0) {
-            return arr.slice(0..< k)
-        }
-
-        // find k closest elements
-        var i = left
-        var j = left
-        while (j - i < k) {
-            if (i == 0) {
-                j++
-            } else if (j == arr.size) {
-                i--
+        while (left < right) {
+            val mid = (left + right) / 2;
+            if (x - arr[mid] > arr[mid + k] - x) {
+                left = mid + 1;
             } else {
-                if (x - arr[i - 1] <= arr[j] - x) {
-                    i--
-                } else {
-                    j++
-                }
+                right = mid;
             }
         }
 
-        return arr.slice(i ..< j)
+        return arr.sliceArray(left..<left + k).toList()
     }
 
     println(findClosestElements(intArrayOf(1, 2, 3, 4, 5), 4, 3)) // [1, 2, 3, 4]
