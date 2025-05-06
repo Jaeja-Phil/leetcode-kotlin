@@ -15,18 +15,35 @@ package medium
  */
 fun main() {
     fun generateParenthesis(n: Int): List<String> {
-        val res = mutableListOf<String>()
-        fun backtrack(s: String, open: Int, close: Int) {
-            if (open == n && close == n) {
-                res.add(s)
-                return
+        // Solution 1. Using recursion
+//        val res = mutableListOf<String>()
+//        fun backtrack(s: String, open: Int, close: Int) {
+//            if (open == n && close == n) {
+//                res.add(s)
+//                return
+//            }
+//            if (open < n) backtrack("$s(", open + 1, close)
+//            if (close < open) backtrack("$s)", open, close + 1)
+//        }
+//
+//        backtrack("", 0, 0)
+//        return res
+
+        // Solution 2. Using dp
+        val dp = Array(n + 1) { mutableListOf<String>() }
+        dp[0].add("")
+
+        for (i in 1..n) {
+            for (j in 0..<i) {
+                for (left in dp[j]) {
+                    for (right in dp[i - 1 - j]) {
+                        dp[i].add("($left)$right")
+                    }
+                }
             }
-            if (open < n) backtrack("$s(", open + 1, close)
-            if (close < open) backtrack("$s)", open, close + 1)
         }
 
-        backtrack("", 0, 0)
-        return res
+        return dp[n]
     }
 
     println(generateParenthesis(3)) // [((())), (()()), (())(), ()(()), ()()()]
