@@ -43,47 +43,65 @@ fun main() {
 }
 
 fun `Asteroid Collision`(asteroids: IntArray): IntArray {
-    /**
-     * create a stack to keep track of the asteroids.
-     */
-    val s = Stack<Int>()
+//    /**
+//     * create a stack to keep track of the asteroids.
+//     */
+//    val s = Stack<Int>()
+//
+//    /**
+//     * iterate through the asteroids
+//     */
+//    for (i in 0..asteroids.lastIndex) {
+//        /**
+//         * if the stack is not empty (there is asteroid/s to collide with) and current asteroid is negative (moving left),
+//         * check whether the top of the stack (last asteroid) is positive (moving right)
+//         * - in essence, check if there is going to be a collision
+//         */
+//        while (s.isNotEmpty() && asteroids[i] < 0 && s.peek() > 0) {
+//            /**
+//             * check the difference,
+//             * - if the difference is negative, it means the current asteroid is smaller than the last asteroid
+//             *   - pop (destroy) the last asteroid
+//             * - if the difference is positive, it means the current asteroid is bigger than the last asteroid
+//             *   - destroy the current asteroid by setting it to 0
+//             * - if the two asteroids are of the same size, destroy both by
+//             *   - setting the current asteroid to 0
+//             *   - pop (destroy) the last asteroid
+//             */
+//            val diff = asteroids[i] + s.peek()
+//            when {
+//                diff < 0 -> s.pop()
+//                diff > 0 -> asteroids[i] = 0
+//                else -> { asteroids[i] = 0; s.pop() }
+//            }
+//        }
+//
+//        /**
+//         * once the collisions are all taken care of, push the current asteroid to the stack
+//         * unless it is destroyed (set to 0)
+//         */
+//        if (asteroids[i] != 0) {
+//            s.push(asteroids[i])
+//        }
+//    }
+//
+//    return s.toIntArray()
 
-    /**
-     * iterate through the asteroids
-     */
-    for (i in 0..asteroids.lastIndex) {
-        /**
-         * if the stack is not empty (there is asteroid/s to collide with) and current asteroid is negative (moving left),
-         * check whether the top of the stack (last asteroid) is positive (moving right)
-         * - in essence, check if there is going to be a collision
-         */
-        while (s.isNotEmpty() && asteroids[i] < 0 && s.peek() > 0) {
-            /**
-             * check the difference,
-             * - if the difference is negative, it means the current asteroid is smaller than the last asteroid
-             *   - pop (destroy) the last asteroid
-             * - if the difference is positive, it means the current asteroid is bigger than the last asteroid
-             *   - destroy the current asteroid by setting it to 0
-             * - if the two asteroids are of the same size, destroy both by
-             *   - setting the current asteroid to 0
-             *   - pop (destroy) the last asteroid
-             */
-            val diff = asteroids[i] + s.peek()
-            when {
-                diff < 0 -> s.pop()
-                diff > 0 -> asteroids[i] = 0
-                else -> { asteroids[i] = 0; s.pop() }
-            }
+    // Solution 2. Without using stack
+    val n = asteroids.size
+    val result = mutableListOf<Int>()
+    var i = 0
+    while (i < n) {
+        if (result.isEmpty() || asteroids[i] > 0 || result.last() < 0) {
+            result.add(asteroids[i])
+        } else if (result.last() + asteroids[i] == 0) {
+            result.removeAt(result.size - 1)
+        } else if (result.last() + asteroids[i] < 0) {
+            result.removeAt(result.size - 1)
+            i--
         }
-
-        /**
-         * once the collisions are all taken care of, push the current asteroid to the stack
-         * unless it is destroyed (set to 0)
-         */
-        if (asteroids[i] != 0) {
-            s.push(asteroids[i])
-        }
+        i++
     }
 
-    return s.toIntArray()
+    return result.toIntArray()
 }
