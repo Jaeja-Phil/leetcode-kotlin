@@ -23,15 +23,34 @@ package medium
  */
 fun main() {
     fun dailyTemperatures(temperatures: IntArray): IntArray {
-        val stack = mutableListOf<Int>()
-        val result = IntArray(temperatures.size)
-        for (i in temperatures.indices) {
-            while (stack.isNotEmpty() && temperatures[i] > temperatures[stack.last()]) {
-                val index = stack.removeLast()
-                result[index] = i - index
+        // Solution 1. Using a stack
+//        val stack = mutableListOf<Int>()
+//        val result = IntArray(temperatures.size)
+//        for (i in temperatures.indices) {
+//            while (stack.isNotEmpty() && temperatures[i] > temperatures[stack.last()]) {
+//                val index = stack.removeLast()
+//                result[index] = i - index
+//            }
+//            stack.add(i)
+//        }
+//        return result
+
+        // Solution 2. Dynamic programming
+        val n = temperatures.size
+        val result = IntArray(n)
+
+        for (i in n - 2 downTo 0) {
+            var j = i + 1
+            while (j < n && temperatures[j] <= temperatures[i]) {
+                if (result[j] == 0) {
+                    j = n // No warmer temperature found, break the loop
+                    break
+                }
+                j += result[j]
             }
-            stack.add(i)
+            if (j < n) result[i] = j - i
         }
+
         return result
     }
 
