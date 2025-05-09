@@ -1,5 +1,7 @@
 package medium
 
+import java.util.Stack
+
 /**
  * Given an absolute path for a Unix-style file system, which begins with a slash '/', transform this path into its
  * simplified canonical path.
@@ -49,36 +51,52 @@ fun main() {
 
 class `$71_SimplifyPath` {
     fun simplifyPath(path: String): String {
-        val stack = mutableListOf<String>()
+//        val stack = mutableListOf<String>()
+//
+//        var i = 0
+//        while (i < path.length) {
+//            if (path[i] == '/') {
+//                i++
+//                continue
+//            }
+//
+//            val (directory, next) = findNextDirectory(path, i)
+//            i = next
+//
+//            when (directory) {
+//                "." -> {
+//                    // Do nothing
+//                }
+//                ".." -> {
+//                    if (stack.isNotEmpty()) {
+//                        stack.removeAt(stack.lastIndex)
+//                    }
+//                }
+//                else -> {
+//                    stack.add(directory)
+//                }
+//            }
+//        }
+//
+//        val result = StringBuilder("/")
+//        result.append(stack.joinToString("/"))
+//        return result.toString()
 
-        var i = 0
-        while (i < path.length) {
-            if (path[i] == '/') {
-                i++
-                continue
-            }
+        // Solution 2
+        val stack = Stack<String>()
+        val paths = path.split("/").filter { it.isNotEmpty() }
 
-            val (directory, next) = findNextDirectory(path, i)
-            i = next
-
-            when (directory) {
-                "." -> {
-                    // Do nothing
+        for (dir in paths) {
+            if (dir == "..") {
+                if (stack.isNotEmpty()) {
+                    stack.pop()
                 }
-                ".." -> {
-                    if (stack.isNotEmpty()) {
-                        stack.removeAt(stack.lastIndex)
-                    }
-                }
-                else -> {
-                    stack.add(directory)
-                }
+            } else if (dir != "" && dir != ".") {
+                stack.push(dir)
             }
         }
 
-        val result = StringBuilder("/")
-        result.append(stack.joinToString("/"))
-        return result.toString()
+        return "/" + stack.joinToString("/")
     }
 
     fun findNextDirectory(path: String, start: Int): Pair<String, Int> {
