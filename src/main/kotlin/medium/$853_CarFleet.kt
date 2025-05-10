@@ -50,23 +50,36 @@ package medium
  */
 fun main() {
     fun carFleet(target: Int, position: IntArray, speed: IntArray): Int {
-        val n = position.size
-        val cars = Array(n) { Pair(position[it], speed[it]) }
-        cars.sortByDescending { it.first } // Sort by position in descending order
+//        val n = position.size
+//        val cars = Array(n) { Pair(position[it], speed[it]) }
+//        cars.sortByDescending { it.first } // Sort by position in descending order
+//
+//        var fleets = 0
+//        var time = 0.0
+//        for (car in cars) {
+//            val pos = car.first
+//            val spd = car.second
+//            val arrivalTime = (target - pos).toDouble() / spd
+//            if (arrivalTime > time) {
+//                time = arrivalTime
+//                fleets++
+//            }
+//        }
+//
+//        return fleets
 
-        var fleets = 0
-        var time = 0.0
-        for (car in cars) {
-            val pos = car.first
-            val spd = car.second
-            val arrivalTime = (target - pos).toDouble() / spd
-            if (arrivalTime > time) {
-                time = arrivalTime
-                fleets++
+        val pair = position.zip(speed).sortedByDescending { it.first }
+        val stack = mutableListOf<Double>()
+
+        for ((p, s) in pair) {
+            val time = (target - p).toDouble() / s
+            stack.add(time)
+            if (stack.size >= 2 && stack[stack.size - 1] <= stack[stack.size - 2]) {
+                stack.removeAt(stack.size - 1)
             }
         }
 
-        return fleets
+        return stack.size
     }
 
     val target = 12
