@@ -41,20 +41,33 @@ fun main() {
 //        return if (nums[left] == target) left else -1
 
         // Solution 2.
-        var left = 0
-        var right = nums.lastIndex
+//        var left = 0
+//        var right = nums.lastIndex
+//
+//        while (left <= right) {
+//            val mid = left + (right - left) / 2
+//            val currentNum = nums[mid]
+//            when {
+//                currentNum > target -> right = mid - 1
+//                currentNum < target -> left = mid + 1
+//                else -> return mid
+//            }
+//        }
+//
+//        return -1
 
-        while (left <= right) {
-            val mid = left + (right - left) / 2
-            val currentNum = nums[mid]
-            when {
-                currentNum > target -> right = mid - 1
-                currentNum < target -> left = mid + 1
-                else -> return mid
+        // Solution 3.
+        fun binarySearch(l: Int, r: Int, nums: IntArray, target: Int): Int {
+            if (l > r) return -1
+            val mid = l + (r - l) / 2
+            return when {
+                nums[mid] == target -> mid
+                nums[mid] < target -> binarySearch(mid + 1, r, nums, target)
+                else -> binarySearch(l, mid - 1, nums, target)
             }
         }
 
-        return -1
+        return binarySearch(0, nums.lastIndex, nums, target)
     }
 
     println(search(intArrayOf(-1, 0, 3, 5, 9, 12), 9)) // 4
