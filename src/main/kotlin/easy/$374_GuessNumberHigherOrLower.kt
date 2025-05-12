@@ -38,17 +38,39 @@ fun main() {
     class Solution : GuessGame() {
         override fun guessNumber(n: Int): Int {
             // Binary search approach
+//            var left = 1
+//            var right = n
+//            while (left < right) {
+//                val mid = left + (right - left) / 2
+//                when {
+//                    guess(mid) == 0 -> return mid
+//                    guess(mid) == 1 -> left = mid + 1
+//                    else -> right = mid
+//                }
+//            }
+//            return left
+
+            // Ternary search approach
             var left = 1
             var right = n
-            while (left < right) {
-                val mid = left + (right - left) / 2
+
+            while (true) {
+                val mid1 = left + (right - left) / 3
+                val mid2 = right - (right - left) / 3
+
                 when {
-                    guess(mid) == 0 -> return mid
-                    guess(mid) == 1 -> left = mid + 1
-                    else -> right = mid
+                    guess(mid1) == 0 -> return mid1
+                    guess(mid2) == 0 -> return mid2
+                    guess(mid1) + guess(mid2) == 0 -> {
+                        left = mid1 + 1
+                        right = mid2 - 1
+                    }
+                    guess(mid1) == -1 -> {
+                        right = mid1 - 1
+                    }
+                    else -> left = mid2 + 1
                 }
             }
-            return left
         }
     }
 }
